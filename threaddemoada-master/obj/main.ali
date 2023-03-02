@@ -7,6 +7,8 @@ P SS ZX
 
 RN
 RV NO_DELAY
+RV NO_EXCEPTION_HANDLERS
+RV NO_EXCEPTIONS
 RV NO_FIXED_POINT
 RV NO_IO
 RV NO_LONG_LONG_INTEGERS
@@ -20,11 +22,13 @@ RV NO_DYNAMIC_SIZED_OBJECTS
 RV NO_IMPLEMENTATION_ATTRIBUTES
 RV NO_IMPLEMENTATION_PRAGMAS
 RV NO_IMPLICIT_LOOPS
+RV MAX_TASK_ENTRIES=2
 RV MAX_TASKS=1+
 
-U main%b		main.adb		e2787afb NE OO SU
+U main%b		main.adb		4fd0f6cb NE OO SU
 W ada%s			ada.ads			ada.ali
 Z ada.calendar.delays%s	a-caldel.adb		a-caldel.ali
+W ada.integer_text_io%s	a-inteio.ads		a-inteio.ali
 Z ada.real_time%s	a-reatim.adb		a-reatim.ali
 Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
 W ada.text_io%s		a-textio.adb		a-textio.ali
@@ -37,12 +41,15 @@ Z system.secondary_stack%s  s-secsta.adb	s-secsta.ali
 Z system.soft_links%s	s-soflin.adb		s-soflin.ali
 Z system.task_info%s	s-tasinf.adb		s-tasinf.ali
 Z system.tasking%s	s-taskin.adb		s-taskin.ali
+Z system.tasking.rendezvous%s  s-tasren.adb	s-tasren.ali
 Z system.tasking.stages%s  s-tassta.adb		s-tassta.ali
 
 D ada.ads		20210520051132 76789da1 ada%s
 D a-calend.ads		20210520051128 474d9720 ada.calendar%s
 D a-caldel.ads		20210520051128 9f20b83d ada.calendar.delays%s
 D a-except.ads		20210520051128 946f3014 ada.exceptions%s
+D a-finali.ads		20210520051128 bf4f806b ada.finalization%s
+D a-inteio.ads		20210520051128 f64b89a4 ada.integer_text_io%s
 D a-ioexce.ads		20210520051128 e4a01f64 ada.io_exceptions%s
 D a-reatim.ads		20210520051128 0240fc73 ada.real_time%s
 D a-stream.ads		20210520051130 119b8fb3 ada.streams%s
@@ -51,18 +58,20 @@ D a-sttebu.ads		20210520051130 18209c64 ada.strings.text_buffers%s
 D a-stuten.ads		20210520051130 808c40ad ada.strings.utf_encoding%s
 D a-tags.ads		20210520051130 9eaa38c6 ada.tags%s
 D a-textio.ads		20210520051130 aef4d56d ada.text_io%s
+D a-tiinio.ads		20210520051130 390edddb ada.text_io.integer_io%s
 D a-unccon.ads		20210520051130 0e9b276f ada.unchecked_conversion%s
 D interfac.ads		20210520051132 edec285f interfaces%s
 D i-c.ads		20210520051132 d9beded9 interfaces.c%s
 D i-cstrin.ads		20210520051132 341d0ddf interfaces.c.strings%s
 D i-cstrea.ads		20210520051132 e53d8b8e interfaces.c_streams%s
-D main.adb		20230302053944 4c8caf96 main%b
+D main.adb		20230302090406 176faa02 main%b
 D system.ads		20210520051136 2ffa5114 system%s
 D s-atacco.ads		20210520051132 4c36d12f system.address_to_access_conversions%s
 D s-conca4.ads		20210520051132 7e642b20 system.concat_4%s
 D s-crtl.ads		20210520051132 0ebbdb71 system.crtl%s
 D s-exctab.ads		20210520051132 54135002 system.exception_table%s
 D s-ficobl.ads		20210520051132 078245e4 system.file_control_block%s
+D s-finroo.ads		20210520051132 4ff27390 system.finalization_root%s
 D s-imagei.ads		20210520051134 0d3f86a7 system.image_i%s
 D s-imgint.ads		20210520051134 bdb6f5ec system.img_int%s
 D s-imglli.ads		20210520051134 3723d9ff system.img_lli%s
@@ -81,6 +90,9 @@ D s-tasinf.ads		20210520051128 601f6b72 system.task_info%s
 D s-taspri.ads		20210520051128 a1350802 system.task_primitives%s
 D s-taprop.ads		20210520051128 6eefbe12 system.task_primitives.operations%s
 D s-taskin.ads		20210520051128 88fba9ad system.tasking%s
+D s-taprob.ads		20210520051128 acd6094d system.tasking.protected_objects%s
+D s-tpoben.ads		20210520051128 60ad3dae system.tasking.protected_objects.entries%s
+D s-tasren.ads		20210520051128 a67a9949 system.tasking.rendezvous%s
 D s-tassta.ads		20210520051128 cca55c94 system.tasking.stages%s
 D s-traent.ads		20210520051134 26a8d361 system.traceback_entries%s
 D s-unstyp.ads		20210520051134 2b077493 system.unsigned_types%s
@@ -88,25 +100,44 @@ D s-wchcon.ads		20210520051136 1b7d22d2 system.wch_con%s
 D s-win32.ads		20210520051136 15ac53fb system.win32%s
 D unchconv.ads		20210520051136 ca2f9e18 unchecked_conversion%s
 G a e
-G c Z b b [main standard 2 11 none]
+G c Z b b [main standard 3 11 none]
 X 1 ada.ads
-16K9*Ada 20e8 18|1r6 28r7
-X 12 a-textio.ads
-58K13*Text_IO 725e16 18|1w10 28r11
-506U14*Put_Line 18|28s19
-X 18 main.adb
-2U11*Main 2b11 39l5 39t9
-4b4 can_stop{boolean} 5r18 15m7 26r20
-6i4 coll_thread{integer} 33m4 35r19
-8T14 break_thread 11b14 16l8 16t20 31r9
-9T14 main_thread 18b14 29l8 29t19 35r35
-12o7 time{duration} 14r13
-19i7 step{long_long_integer} 25r26
-20i7 col{long_long_integer} 24m10 24r17 25r22 28r38
-21i7 sum{long_long_integer} 25m10 25r16 28r59
-31t4 b1{8T14}
-35a7 A(9T14)
-X 35 s-stausa.ads
+16K9*Ada 20e8 21|1r6 2r6 58r7
+X 6 a-inteio.ads
+18K13*Integer_Text_IO[15|46] 21|2w10
+X 14 a-textio.ads
+58K13*Text_IO 725e16 21|1w10 58r11
+506U14*Put_Line 21|58s19
+X 21 main.adb
+3U11*Main 3b11 72l5 72t9
+5a4 can_stop(boolean) 6r19 33m7 56r20
+7i4 coll_thread{integer} 61r22 62r22 63r22
+9T14 break_thread 12l8 12e20 18b14 34l8 34t20 62r38
+10Y13 SetD 10>19 22b14 26l11 26t15 68s13
+10o19 Value{duration} 24r21
+11Y13 SetId 11>20 27b14 31l11 31t16 69s13
+11i20 Value{integer} 29r19
+13T14 main_thread 16l8 16e19 36b14 59l8 59t19 61r38
+14Y13 SetS 14>19 42b14 47l11 47t15 66s13
+14i19 value{long_long_integer} 44r21
+15Y13 SetId 15>20 48b14 52l11 52t16 67s13
+15i20 Value{integer} 50r19
+19o7 time{duration} 24m13 32r13
+20i7 id{integer} 29m13 33r16
+22o20 value{duration}
+27i21 value{integer}
+37i7 step{long_long_integer} 44m13 55r29
+38i7 col{long_long_integer} 54m10 54r17 55r23 58r39
+39i7 sum{long_long_integer} 55m10 55r17 58r60
+40i7 id{integer} 50m13 56r29
+42i20 value{long_long_integer}
+48i21 value{integer}
+60a4 S_D(duration) 68r18
+61a4 M(13T14) 65r13 66r7 67r7
+62a4 S(9T14) 68r7 69r7
+63a4 N(long_long_integer) 66r19
+65i8 I{integer} 66r10 66r22 67r10 67r20 68r10 68r22 69r10 69r19
+X 39 s-stausa.ads
 208U14*Initialize 209i<c,__gnat_stack_usage_initialize>22
 273U14*Output_Results 277i<c,__gnat_stack_usage_output_results>22
 
